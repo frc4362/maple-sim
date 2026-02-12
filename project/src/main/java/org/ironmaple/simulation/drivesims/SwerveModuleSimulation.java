@@ -64,6 +64,7 @@ public class SwerveModuleSimulation {
     private Current driveMotorStatorCurrent = Amps.zero();
     private Angle driveWheelFinalPosition = Radians.zero();
     private AngularVelocity driveWheelFinalSpeed = RadiansPerSecond.zero();
+    private double driveWheelOdometryDistanceScale = 1.0;
 
     private SimulatedMotorController driveMotorController;
 
@@ -158,6 +159,19 @@ public class SwerveModuleSimulation {
             Vector2 moduleCurrentGroundVelocityWorldRelative,
             Rotation2d robotFacing,
             double gravityForceOnModuleNewtons) {
+        return updateSimulationSubTickGetModuleForce(
+                moduleCurrentGroundVelocityWorldRelative,
+                robotFacing,
+                gravityForceOnModuleNewtons,
+                driveWheelOdometryDistanceScale);
+    }
+
+    public Vector2 updateSimulationSubTickGetModuleForce(
+            Vector2 moduleCurrentGroundVelocityWorldRelative,
+            Rotation2d robotFacing,
+            double gravityForceOnModuleNewtons,
+            double driveWheelOdometryDistanceScale) {
+        this.driveWheelOdometryDistanceScale = sanitizeDriveWheelOdometryScale(driveWheelOdometryDistanceScale);
         /* Step1: Update the steer mechanism simulation */
         steerMotorSim.update(SimulatedArena.getSimulationDt());
 
@@ -168,7 +182,7 @@ public class SwerveModuleSimulation {
                 getPropellingForce(grippingForceNewtons, moduleWorldFacing, moduleCurrentGroundVelocityWorldRelative);
 
         /* Step3: Updates and caches the encoder readings for odometry simulation. */
-        updateEncoderCaches();
+        updateEncoderCaches(this.driveWheelOdometryDistanceScale);
 
         return propellingForce;
     }
@@ -281,10 +295,11 @@ public class SwerveModuleSimulation {
      *
      * <p>An internal method to cache the encoder values to their queues.
      */
-    private void updateEncoderCaches() {
+    private void updateEncoderCaches(double driveWheelDistanceScale) {
         /* Increment of drive wheel position */
-        this.driveWheelFinalPosition =
-                this.driveWheelFinalPosition.plus(this.driveWheelFinalSpeed.times(SimulatedArena.getSimulationDt()));
+        this.driveWheelFinalPosition = this.driveWheelFinalPosition.plus(this.driveWheelFinalSpeed
+                .times(SimulatedArena.getSimulationDt())
+                .times(driveWheelDistanceScale));
 
         /* cache sensor readings to queue for high-frequency odometry */
         this.steerAbsolutePositionCache.poll();
@@ -292,6 +307,19 @@ public class SwerveModuleSimulation {
 
         this.driveWheelFinalPositionCache.poll();
         this.driveWheelFinalPositionCache.offer(driveWheelFinalPosition);
+    }
+
+    public void setDriveWheelOdometryDistanceScale(double driveWheelOdometryDistanceScale) {
+        this.driveWheelOdometryDistanceScale = sanitizeDriveWheelOdometryScale(driveWheelOdometryDistanceScale);
+    }
+
+    public double getDriveWheelOdometryDistanceScale() {
+        return driveWheelOdometryDistanceScale;
+    }
+
+    private static double sanitizeDriveWheelOdometryScale(double requestedScale) {
+        if (!Double.isFinite(requestedScale) || requestedScale <= 0.0) return 1.0;
+        return requestedScale;
     }
 
     /**
