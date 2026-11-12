@@ -2,7 +2,7 @@ apply plugin: 'maven-publish'
 
 ext.licenseFile = files("$rootDir/LICENSE.txt")
 
-def pubVersion = '0.4.0-beta-team254-rampsim'
+def pubVersion = '0.4.0-beta-4362-wpilib2027a7'
 
 def outputsFolder = file("$buildDir/outputs")
 
@@ -43,56 +43,12 @@ ext.addTaskToCopyAllOutputs = { task ->
 
 def artifactGroupId = 'org.ironmaple'
 def baseArtifactId = 'maplesim'
-def driverZipBaseName = "_GROUP_org_ironmaple_ID_${baseArtifactId}-driver_CLS"
-def zipBaseName = "_GROUP_org_ironmaple_ID_${baseArtifactId}-cpp_CLS"
 def javaBaseName = "_GROUP_org_ironmaple_ID_${baseArtifactId}-java_CLS"
 
 copy {
     from "maple-sim.json"
     into "$rootDir/../docs/vendordep"
     expand(version: "$pubVersion")
-}
-
-task cppHeadersZip(type: Zip) {
-    destinationDirectory = outputsFolder
-    archiveBaseName = zipBaseName
-    archiveClassifier = "headers"
-
-    from(licenseFile) {
-        into '/'
-    }
-
-    from('src/main/native/include') {
-        into '/'
-    }
-}
-
-task cppSourceZip(type: Zip) {
-    destinationDirectory = outputsFolder
-    archiveBaseName = zipBaseName
-    archiveClassifier = "sources"
-
-    from(licenseFile) {
-        into '/'
-    }
-
-    from('src/main/native/cpp') {
-        into '/'
-    }
-}
-
-task cppDriverHeadersZip(type: Zip) {
-    destinationDirectory = outputsFolder
-    archiveBaseName = driverZipBaseName
-    archiveClassifier = "headers"
-
-    from(licenseFile) {
-        into '/'
-    }
-
-    from('src/main/driver/include') {
-        into '/'
-    }
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
@@ -164,22 +120,16 @@ addTaskToCopyAllOutputs(outputJar)
 addTaskToCopyAllOutputs(outputSourcesJar)
 addTaskToCopyAllOutputs(outputJavadocJar)
 
-model {
-    publishing {
-        def taskList = createComponentZipTasks($.components, ['Vendor'], zipBaseName, Zip, project, includeStandardZipFormat)
+publishing {
+    publications {
+        java(MavenPublication) {
+            artifact jar
+            artifact sourcesJar
+            artifact javadocJar
 
-        def driverTaskList = createComponentZipTasks($.components, ['VendorDriver'], driverZipBaseName, Zip, project, includeStandardZipFormat)
-
-        publications {
-            java(MavenPublication) {
-                artifact jar
-                artifact sourcesJar
-                artifact javadocJar
-
-                artifactId = "${baseArtifactId}-java"
-                groupId artifactGroupId
-                version pubVersion
-            }
+            artifactId = "${baseArtifactId}-java"
+            groupId artifactGroupId
+            version pubVersion
         }
     }
 }

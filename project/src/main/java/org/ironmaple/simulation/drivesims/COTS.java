@@ -1,10 +1,10 @@
 package org.ironmaple.simulation.drivesims;
 
-import static edu.wpi.first.units.Units.*;
+import static org.wpilib.units.Units.*;
 
-import edu.wpi.first.math.system.plant.DCMotor;
 import java.util.function.Supplier;
 import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
+import org.wpilib.math.system.DCMotor;
 
 public class COTS {
     /**
@@ -166,12 +166,11 @@ public class COTS {
      */
     public static SwerveModuleSimulationConfig ofSwerveX(
             DCMotor driveMotor, DCMotor steerMotor, double wheelCOF, int gearRatioLevel, double firstStageRatio) {
-        double secondStageRatio =
-                switch (gearRatioLevel) {
-                    case 1 -> 26.0 / 20.0;
-                    case 2, 3 -> 28.0 / 18.0;
-                    default -> throw new IllegalStateException("Unknown gearing level: " + gearRatioLevel);
-                };
+        double secondStageRatio = switch (gearRatioLevel) {
+            case 1 -> 26.0 / 20.0;
+            case 2, 3 -> 28.0 / 18.0;
+            default -> throw new IllegalStateException("Unknown gearing level: " + gearRatioLevel);
+        };
         return new SwerveModuleSimulationConfig(
                 driveMotor,
                 steerMotor,
@@ -200,24 +199,27 @@ public class COTS {
                 driveMotor,
                 steerMotor,
                 switch (gearRatioLevel) {
-                    case 1 -> switch (pinionSize) {
-                        case 10 -> 8.1;
-                        case 11 -> 7.36;
-                        case 12 -> 6.75;
-                        default -> throw unknownPinionErr;
-                    };
-                    case 2 -> switch (pinionSize) {
-                        case 10 -> 6.72;
-                        case 11 -> 6.11;
-                        case 12 -> 5.6;
-                        default -> throw unknownPinionErr;
-                    };
-                    case 3 -> switch (pinionSize) {
-                        case 10 -> 5.51;
-                        case 11 -> 5.01;
-                        case 12 -> 4.59;
-                        default -> throw unknownPinionErr;
-                    };
+                    case 1 ->
+                        switch (pinionSize) {
+                            case 10 -> 8.1;
+                            case 11 -> 7.36;
+                            case 12 -> 6.75;
+                            default -> throw unknownPinionErr;
+                        };
+                    case 2 ->
+                        switch (pinionSize) {
+                            case 10 -> 6.72;
+                            case 11 -> 6.11;
+                            case 12 -> 5.6;
+                            default -> throw unknownPinionErr;
+                        };
+                    case 3 ->
+                        switch (pinionSize) {
+                            case 10 -> 5.51;
+                            case 11 -> 5.01;
+                            case 12 -> 4.59;
+                            default -> throw unknownPinionErr;
+                        };
                     default -> throw unknownLevelErr;
                 },
                 13.3714,
@@ -240,18 +242,20 @@ public class COTS {
                 driveMotor,
                 steerMotor,
                 switch (gearRatioLevel) {
-                    case 1 -> switch (pinionSize) {
-                        case 12 -> 6;
-                        case 13 -> 5.54;
-                        case 14 -> 5.14;
-                        default -> throw unknownPinionErr;
-                    };
-                    case 2 -> switch (pinionSize) {
-                        case 12 -> 4.71;
-                        case 13 -> 4.4;
-                        case 14 -> 4.13;
-                        default -> throw unknownPinionErr;
-                    };
+                    case 1 ->
+                        switch (pinionSize) {
+                            case 12 -> 6;
+                            case 13 -> 5.54;
+                            case 14 -> 5.14;
+                            default -> throw unknownPinionErr;
+                        };
+                    case 2 ->
+                        switch (pinionSize) {
+                            case 12 -> 4.71;
+                            case 13 -> 4.4;
+                            case 14 -> 4.13;
+                            default -> throw unknownPinionErr;
+                        };
                     default -> throw unknownLevelErr;
                 },
                 41.25,
@@ -279,30 +283,34 @@ public class COTS {
                 driveMotor,
                 steerMotor,
                 switch (gearRatioLevel) {
-                    case 1 -> switch (pinionSize) {
-                        case 10 -> 7.67;
-                        case 11 -> 6.98;
-                        case 12 -> 6.39;
-                        default -> throw unknownPinionErr;
-                    };
-                    case 2 -> switch (pinionSize) {
-                        case 10 -> 6.82;
-                        case 11 -> 6.2;
-                        case 12 -> 5.68;
-                        default -> throw unknownPinionErr;
-                    };
-                    case 3 -> switch (pinionSize) {
-                        case 10 -> 6.48;
-                        case 11 -> 5.89;
-                        case 12 -> 5.4;
-                        default -> throw unknownPinionErr;
-                    };
-                    case 4 -> switch (pinionSize) {
-                        case 10 -> 5.67;
-                        case 11 -> 5.15;
-                        case 12 -> 4.73;
-                        default -> throw unknownPinionErr;
-                    };
+                    case 1 ->
+                        switch (pinionSize) {
+                            case 10 -> 7.67;
+                            case 11 -> 6.98;
+                            case 12 -> 6.39;
+                            default -> throw unknownPinionErr;
+                        };
+                    case 2 ->
+                        switch (pinionSize) {
+                            case 10 -> 6.82;
+                            case 11 -> 6.2;
+                            case 12 -> 5.68;
+                            default -> throw unknownPinionErr;
+                        };
+                    case 3 ->
+                        switch (pinionSize) {
+                            case 10 -> 6.48;
+                            case 11 -> 5.89;
+                            case 12 -> 5.4;
+                            default -> throw unknownPinionErr;
+                        };
+                    case 4 ->
+                        switch (pinionSize) {
+                            case 10 -> 5.67;
+                            case 11 -> 5.15;
+                            case 12 -> 4.73;
+                            default -> throw unknownPinionErr;
+                        };
                     default -> throw unknownLevelErr;
                 },
                 12.1,
@@ -325,24 +333,27 @@ public class COTS {
                 driveMotor,
                 steerMotor,
                 switch (gearRatioLevel) {
-                    case 1 -> switch (pinionSize) {
-                        case 15 -> 6.0;
-                        case 16 -> 5.63;
-                        case 17 -> 5.29;
-                        default -> throw unknownPinionErr;
-                    };
-                    case 2 -> switch (pinionSize) {
-                        case 17 -> 4.94;
-                        case 18 -> 4.67;
-                        case 19 -> 4.42;
-                        default -> throw unknownPinionErr;
-                    };
-                    case 3 -> switch (pinionSize) {
-                        case 19 -> 4.11;
-                        case 20 -> 3.9;
-                        case 21 -> 3.71;
-                        default -> throw unknownPinionErr;
-                    };
+                    case 1 ->
+                        switch (pinionSize) {
+                            case 15 -> 6.0;
+                            case 16 -> 5.63;
+                            case 17 -> 5.29;
+                            default -> throw unknownPinionErr;
+                        };
+                    case 2 ->
+                        switch (pinionSize) {
+                            case 17 -> 4.94;
+                            case 18 -> 4.67;
+                            case 19 -> 4.42;
+                            default -> throw unknownPinionErr;
+                        };
+                    case 3 ->
+                        switch (pinionSize) {
+                            case 19 -> 4.11;
+                            case 20 -> 3.9;
+                            case 21 -> 3.71;
+                            default -> throw unknownPinionErr;
+                        };
                     default -> throw unknownLevelErr;
                 },
                 25.9,

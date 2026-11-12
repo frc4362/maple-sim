@@ -36,7 +36,7 @@ Check the [online documentation](https://shenzhen-robotics-alliance.github.io/ma
 
 Vendor URL:
 ```
-https://shenzhen-robotics-alliance.github.io/maple-sim/vendordep/maple-sim.json
+https://frc4362.github.io/maple-sim/vendordep/maple-sim.json
 ```
 <br>
 

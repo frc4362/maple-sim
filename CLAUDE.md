@@ -9,9 +9,10 @@
 - **Documentation**: https://shenzhen-robotics-alliance.github.io/maple-sim/
 - **JavaDocs**: https://shenzhen-robotics-alliance.github.io/maple-sim/javadocs/
 - **Physics Engine**: dyn4j 5.0.2 (2D rigid-body dynamics)
-- **Java Version**: 17 (source & target compatibility)
-- **WPILib Version**: 2025.3.2
-- **Gradle Version**: 8.11
+- **Java Version**: 25 (source & target compatibility, matches the WPILib 2027 JDK)
+- **WPILib Version**: 2027.0.0-alpha-8 artifacts (WPILib 2027 alpha 7 install; packages are `org.wpilib.*`, Maven group `org.wpilib`)
+- **Gradle Version**: 9.4.1
+- **Fork**: frc4362/maple-sim (adds Team 254's swerve extensibility changes on top of upstream)
 
 ---
 
@@ -35,15 +36,9 @@ maple-sim/
 ```
 
 ### Gradle Plugins Used
-- `java` - Java compilation
-- `cpp` - C++ support (minimal usage)
-- `google-test` - Testing framework
-- `com.diffplug.spotless` 7.0.0.BETA4 - Code formatting
-- `edu.wpi.first.wpilib.repositories.WPILibRepositoriesPlugin` 2025.0 - WPILib repos
-- `edu.wpi.first.NativeUtils` 2025.9.0 - Native utilities
-- `edu.wpi.first.GradleJni` 1.1.0 - JNI support
-- `edu.wpi.first.GradleVsCode` 2.1.0 - VSCode integration
-- `edu.wpi.first.GradleRIO` 2025.3.2 - FRC robot support
+- `java` - Java compilation (library is pure Java; the old C++/JNI build was removed)
+- `com.diffplug.spotless` 8.4.0 - Code formatting (palantir-java-format 2.103.0, needed for JDK 25)
+- `org.wpilib.GradleRIO` 2027.0.0-alpha-8 - WPILib dependencies and desktop test support
 - `maven-publish` - Publishing to Maven
 
 ### Dependencies
@@ -51,21 +46,15 @@ maple-sim/
 **Core Physics**:
 - `org.dyn4j:dyn4j:5.0.2` - Physics engine
 
-**WPILib Dependencies** (version 2025.3.2):
-- `cscore-java` - Camera support
-- `cameraserver-java` - Camera server
-- `ntcore-java` - NetworkTables
-- `wpilibj-java` - Core WPILib
-- `wpiutil-java` - Utilities
-- `wpimath-java` - Math library
-- `wpiunits-java` - Units library
-- `wpilibNewCommands-java` - Command-based framework
-- `hal-java` - Hardware abstraction layer
+**WPILib Dependencies** (`wpi.java.deps.wpilib()`, version 2027.0.0-alpha-8):
+- Core WPILib, wpimath, wpiunits, ntcore, wpiutil, hal, telemetry (replaces SmartDashboard)
 
 **Additional Libraries**:
-- `org.ejml:ejml-simple:0.43.1` - Matrix operations
-- `com.fasterxml.jackson.*:2.15.2` - JSON processing
-- `edu.wpi.first.thirdparty.frc2024.opencv:opencv-java:4.8.0-2` - OpenCV
+- `com.fasterxml.jackson.*:2.19.2` - JSON processing
+
+**Testing**: JUnit 5 in `project/src/test` (headless smoke tests of the swerve sim; run with `./gradlew test`).
+
+**WPILib 2027 API notes**: `ChassisSpeeds` -> `ChassisVelocities` (`vx`/`vy`/`omega`), `SwerveModuleState` -> `SwerveModuleVelocity`, `DriverStation` queries -> `RobotState` / `MatchState` / `DriverStationErrors`, `Alliance` is a top-level `RED`/`BLUE` enum, `Translation2d.getAngle()` returns `Optional`.
 
 ### Build Tasks
 
