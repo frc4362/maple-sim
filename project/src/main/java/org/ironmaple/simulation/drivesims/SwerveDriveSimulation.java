@@ -144,7 +144,7 @@ public class SwerveDriveSimulation extends AbstractDriveTrainSimulation {
      *
      * <p>The total friction force should not exceed the tire's grip limit.
      */
-    private void simulateChassisFrictionForce() {
+    protected void simulateChassisFrictionForce() {
         final ChassisSpeeds moduleSpeeds = getModuleSpeeds();
 
         /* The friction force that tries to bring the chassis from floor speeds to module speeds */
@@ -203,7 +203,7 @@ public class SwerveDriveSimulation extends AbstractDriveTrainSimulation {
      * ({@link #getDriveTrainSimulatedChassisSpeedsRobotRelative()}) toward its current modules' angular velocity
      * ({@link #getModuleSpeeds()}).
      */
-    private void simulateChassisFrictionTorque() {
+    protected void simulateChassisFrictionTorque() {
         final double
                 desiredRotationalMotionPercent =
                         Math.abs(getDesiredSpeed().omegaRadiansPerSecond
@@ -247,7 +247,7 @@ public class SwerveDriveSimulation extends AbstractDriveTrainSimulation {
      *
      * <p>The total friction force should not exceed the tire's grip limit.
      */
-    private void simulateModulePropellingForces() {
+    protected void simulateModulePropellingForces() {
         for (int i = 0; i < moduleSimulations.length; i++) {
             final Vector2 moduleWorldPosition = getWorldPoint(GeometryConvertor.toDyn4jVector2(moduleTranslations[i]));
             final Vector2 moduleForce = moduleSimulations[i].updateSimulationSubTickGetModuleForce(
@@ -268,7 +268,7 @@ public class SwerveDriveSimulation extends AbstractDriveTrainSimulation {
      *
      * @return the desired chassis speeds, robot-relative
      */
-    private ChassisSpeeds getDesiredSpeed() {
+    protected ChassisSpeeds getDesiredSpeed() {
         return kinematics.toChassisSpeeds(Arrays.stream(moduleSimulations)
                 .map((SwerveModuleSimulation::getFreeSpinState))
                 .toArray(SwerveModuleState[]::new));
@@ -285,7 +285,7 @@ public class SwerveDriveSimulation extends AbstractDriveTrainSimulation {
      *
      * @return the module speeds, robot-relative
      */
-    private ChassisSpeeds getModuleSpeeds() {
+    protected ChassisSpeeds getModuleSpeeds() {
         return kinematics.toChassisSpeeds(Arrays.stream(moduleSimulations)
                 .map((SwerveModuleSimulation::getCurrentState))
                 .toArray(SwerveModuleState[]::new));
